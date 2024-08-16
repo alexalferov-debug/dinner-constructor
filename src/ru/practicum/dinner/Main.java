@@ -3,7 +3,6 @@ package ru.practicum.dinner;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class Main {
 
@@ -42,13 +41,17 @@ public class Main {
         String dishType = scanner.nextLine();
         System.out.println("Введите название блюда:");
         String dishName = scanner.nextLine();
-        dinnerConstructor.addDishToCategory(dishType,dishName);
+        dinnerConstructor.addDishToCategory(dishType, dishName);
         // добавьте новое блюдо
     }
 
     private static void generateDishCombo() {
         ArrayList<String> dishesTypesList = new ArrayList<>();
         System.out.println("Начинаем конструировать обед...");
+        if (!dinnerConstructor.isMenuFilled()) {
+            System.out.println("Ни один тип в меню ещё не добавлен, перед составлением комбинаций заполните меню");
+            return;
+        }
 
         System.out.println("Введите количество наборов, которые нужно сгенерировать:");
         int numberOfCombos = scanner.nextInt();
@@ -59,17 +62,18 @@ public class Main {
 
         //реализуйте ввод типов блюд
         while (!nextItem.isEmpty()) {
-            if (dinnerConstructor.isTypeExist(nextItem)){
+            if (dinnerConstructor.isTypeExist(nextItem)) {
                 dishesTypesList.add(nextItem);
             } else {
                 System.out.println("Тип " + nextItem + " не существует, не будет учтён при составлении комбинации. Введите один из существующих типов: {" + String.join(",", dinnerConstructor.getAllDishTypes()) + "}");
+
             }
             nextItem = scanner.nextLine();
         }
 
-        HashMap<Integer,ArrayList<String>> combos= dinnerConstructor.generateCombo(numberOfCombos,dishesTypesList);// сгенерируйте комбинации блюд и выведите на экран
-        for (int i = 0;i<numberOfCombos;i++){
-            System.out.print("Комбо " + (i+1) + ":");
+        HashMap<Integer, ArrayList<String>> combos = dinnerConstructor.generateCombo(numberOfCombos, dishesTypesList);// сгенерируйте комбинации блюд и выведите на экран
+        for (int i = 0; i < numberOfCombos; i++) {
+            System.out.print("Комбо " + (i + 1) + ":");
             System.out.println("[" + String.join(", ", combos.get(i)) + "]");
         }
     }
